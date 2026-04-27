@@ -1,0 +1,1041 @@
+<!--
+  CAMPUS COUNSELOR PRESENTATION — PLACEHOLDER HINTS
+  ==================================================
+  Placeholders to fill in before distributing:
+    [Counselor Name]       — Your full name
+    [Degree / Credentials] — e.g., PhD, LPC, LCSW
+    [Background / About Me]— Brief professional bio
+    [Contact Information]  — Office location, phone, email
+    [Presentation URL]     — URL where this page is hosted (for QR code)
+
+  INSTRUCTIONS:
+  Open in browser. Page loads in Edit Mode.
+  Click any text to edit it.
+  Click the photo to replace it.
+  Click Finalize when done.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Counseling Resources</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    /* ── Brand tokens ── */
+    :root {
+      --red:         #B20814;
+      --charcoal:    #333333;
+      --white:       #FFFFFF;
+      --light-grey:  #F8F8F8;
+    }
+
+    /* ── Reset ── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--white);
+      color: var(--charcoal);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    /* ── Scroll-snap container ── */
+    #slide-container {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    /* ── Individual slides ── */
+    .slide {
+      height: 100vh;
+      scroll-snap-align: start;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Alternating backgrounds: odd = white, even = light grey */
+    .slide:nth-child(odd)  { background: var(--white); }
+    .slide:nth-child(even) { background: var(--light-grey); }
+
+    /* ── Slide 1 ── */
+    #slide-1 { background: var(--red); color: var(--white); flex-direction: column; gap: 1.5rem; }
+    #slide-1 h1 { color: var(--white); font-size: clamp(1.8rem, 4vw, 3rem); text-align: center; }
+    #slide-1 .subtitle { color: rgba(255,255,255,0.85); font-size: 1.1rem; text-align: center; }
+    .slide-1-content { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; }
+    #slide-1 svg { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25)); }
+    .logo-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    #college-logo {
+      max-width: 260px;
+      height: auto;
+      cursor: pointer;
+    }
+    .logo-hint { font-size: 0.72rem; color: rgba(255,255,255,0.6); font-style: italic; }
+    #qr-block { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+    #qr-label { color: rgba(255,255,255,0.9); font-size: 0.85rem; }
+    #qr-fallback { color: rgba(255,255,255,0.9); font-size: 0.8rem; word-break: break-all; }
+
+    /* ── Slide 2 ── */
+    .slide-2-layout {
+      display: flex;
+      flex-direction: row;
+      gap: 3rem;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 900px;
+    }
+    .counselor-photo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+    #counselor-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--red);
+      cursor: pointer;
+    }
+    .photo-hint {
+      font-size: 0.75rem;
+      color: #999;
+      font-style: italic;
+    }
+    .counselor-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .counselor-details h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: var(--red);
+    }
+    .counselor-details .credential {
+      font-size: 1rem;
+      color: var(--charcoal);
+      font-style: italic;
+    }
+    .counselor-details .contact {
+      font-size: 0.95rem;
+      color: var(--charcoal);
+    }
+    .counselor-details .dept {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+    /* Responsive: stack on narrow screens */
+    @media (max-width: 600px) {
+      .slide-2-layout { flex-direction: column; gap: 1.5rem; }
+    }
+
+    /* ── Shared content card ── */
+    .content-card {
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .slide-heading {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: var(--red);
+      border-bottom: 3px solid var(--red);
+      padding-bottom: 0.5rem;
+    }
+    .slide-intro {
+      font-size: 1rem;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* ── Slide 3 ── */
+    .help-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .help-list li {
+      padding-left: 1.5rem;
+      position: relative;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--charcoal);
+    }
+    .help-list li::before {
+      content: '✦';
+      color: var(--red);
+      position: absolute;
+      left: 0;
+      font-size: 0.7rem;
+      top: 0.2rem;
+    }
+
+    /* ── Slide 4 ── */
+    .appt-block {
+      background: var(--white);
+      border-left: 4px solid var(--red);
+      padding: 1rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .appt-block h3 {
+      color: var(--red);
+      font-size: 1.1rem;
+    }
+    .contact-detail {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .confidential-note {
+      font-size: 0.9rem;
+      color: #555;
+      font-style: italic;
+    }
+
+    /* ── Resource card (slides 5 & 6) ── */
+    .resource-card {
+      display: flex;
+      flex-direction: row;
+      gap: 1.5rem;
+      align-items: flex-start;
+      background: var(--white);
+      border-left: 4px solid var(--red);
+      border-radius: 0 8px 8px 0;
+      padding: 1.25rem;
+    }
+    .resource-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .resource-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .resource-details h3 {
+      color: var(--red);
+      font-size: 1.1rem;
+    }
+    .resource-details a {
+      color: var(--red);
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+    .feature-list li {
+      padding-left: 1.25rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+    }
+    .feature-list li::before {
+      content: '→';
+      color: var(--red);
+      position: absolute;
+      left: 0;
+    }
+
+    /* ── Slide 7: Crisis Resources ── */
+    #slide-7 { background: var(--charcoal); }
+    .crisis-heading { color: var(--white); border-bottom-color: var(--red); }
+    #slide-7 .slide-intro { color: rgba(255,255,255,0.85); }
+    .crisis-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .crisis-card {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid var(--red);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .crisis-number {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: bold;
+      color: var(--red);
+      font-family: Georgia, serif;
+    }
+    .crisis-label {
+      font-size: 0.9rem;
+      color: var(--white);
+      font-weight: bold;
+    }
+    .crisis-sub {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.65);
+    }
+    .crisis-card--emergency {
+      border-color: #ff4444;
+    }
+    .crisis-card--emergency .crisis-number { color: #ff4444; }
+    @media (max-width: 600px) {
+      .crisis-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Slide 8: Additional Resources ── */
+    .about-block, .credentials-block, .more-resources {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .about-block h3, .credentials-block h3, .more-resources h3 {
+      color: var(--red);
+      font-size: 1rem;
+    }
+    .more-resources a {
+      color: var(--red);
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    /* ── Edit Toolbar ── */
+    #edit-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--charcoal);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      gap: 1rem;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    body[data-mode="finalized"] #edit-toolbar { display: none; }
+    .edit-indicator {
+      font-weight: bold;
+      color: #ffd700;
+      white-space: nowrap;
+    }
+    .toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    #edit-toolbar button {
+      background: rgba(255,255,255,0.15);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 4px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+    #edit-toolbar button:hover { background: rgba(255,255,255,0.3); }
+    #btn-finalize {
+      background: var(--red) !important;
+      border-color: var(--red) !important;
+      font-weight: bold;
+    }
+    #btn-finalize:hover { background: #8a0610 !important; }
+    .qr-label-text { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    #qr-url-input {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 4px;
+      color: var(--white);
+      padding: 0.3rem 0.5rem;
+      font-size: 0.8rem;
+      width: 200px;
+    }
+    #qr-url-input::placeholder { color: rgba(255,255,255,0.4); }
+
+    /* Offset slides so toolbar doesn't cover content */
+    body[data-mode="edit"] #slide-container { padding-top: 44px; height: calc(100vh); }
+
+    /* ── Placeholder styling in Edit Mode ── */
+    [data-mode="edit"] .placeholder {
+      border: 1.5px dashed #aaa;
+      border-radius: 3px;
+      padding: 2px 6px;
+      color: #888;
+      font-style: italic;
+      min-width: 80px;
+      display: inline-block;
+    }
+    [data-mode="edit"] [contenteditable]:focus {
+      outline: 2px solid var(--red);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ── Corner Edit button (finalized mode) ── */
+    #btn-edit-corner {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 999;
+      background: rgba(51,51,51,0.75);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: none;
+      backdrop-filter: blur(4px);
+    }
+    body[data-mode="finalized"] #btn-edit-corner { display: block; }
+
+    /* Focus indicators */
+    button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 2px;
+    }
+
+    /* ── Footer ── */
+    .slide-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--red);
+      color: var(--white);
+      text-align: center;
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ── Slide Animations ── */
+
+    /* Pre-animation state: slides start invisible */
+    .slide .slide-content,
+    .slide .slide-1-content,
+    .slide .slide-2-layout,
+    .slide-footer {
+      opacity: 0;
+    }
+
+    /* Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideFromLeft {
+      from { opacity: 0; transform: translateX(-60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideFromRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.88); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideFromBottom {
+      from { opacity: 0; transform: translateY(50px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes staggerIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Animation assignments per slide (applied when .animate-in is added to the slide) */
+    #slide-1.animate-in .slide-content,
+    #slide-1.animate-in .slide-1-content  { animation: fadeIn 0.8s ease forwards; }
+    #slide-2.animate-in .slide-2-layout   { animation: slideFromLeft 0.7s ease forwards; }
+    #slide-3.animate-in .slide-content    { animation: slideFromRight 0.7s ease forwards; }
+    #slide-4.animate-in .slide-content    { animation: zoomIn 0.7s ease forwards; }
+    #slide-5.animate-in .slide-content    { animation: slideFromBottom 0.7s ease forwards; }
+    #slide-6.animate-in .slide-content    { animation: fadeIn 0.5s ease forwards; }
+    #slide-7.animate-in .slide-content    { animation: slideFromLeft 0.7s ease forwards; }
+    #slide-8.animate-in .slide-content    { animation: zoomIn 0.7s ease forwards; }
+    #slide-8.animate-in .slide-footer     { animation: fadeIn 0.6s ease 0.4s forwards; }
+
+    /* Slide 6 stagger: list items animate in one by one */
+    #slide-6.animate-in .feature-list li {
+      animation: staggerIn 0.4s ease forwards;
+      opacity: 0;
+    }
+    #slide-6.animate-in .feature-list li:nth-child(1) { animation-delay: 0.3s; }
+    #slide-6.animate-in .feature-list li:nth-child(2) { animation-delay: 0.5s; }
+    #slide-6.animate-in .feature-list li:nth-child(3) { animation-delay: 0.7s; }
+
+    /* ── Slide Progress Indicator ── */
+    #slide-progress {
+      position: fixed;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 998;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      align-items: center;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(51,51,51,0.3);
+      border: 2px solid rgba(51,51,51,0.5);
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.3s, transform 0.3s, border-color 0.3s;
+    }
+    .dot.active {
+      background: var(--red);
+      border-color: var(--red);
+      transform: scale(1.4);
+    }
+    .dot:hover { background: rgba(178,8,20,0.5); border-color: var(--red); }
+    /* On dark slides (7), make dots lighter */
+
+    /* ── High Contrast Mode ── */
+    body.high-contrast {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    body.high-contrast .slide { background: #111 !important; }
+    body.high-contrast #slide-1 { background: #1a0002 !important; }
+    body.high-contrast #slide-7 { background: #0a0a0a !important; }
+    body.high-contrast .slide-heading { color: var(--red) !important; border-bottom-color: var(--red) !important; }
+    body.high-contrast h1, body.high-contrast h2, body.high-contrast h3 { color: #fff !important; }
+    body.high-contrast .slide-heading { color: var(--red) !important; }
+    body.high-contrast p, body.high-contrast li { color: #eee !important; }
+    body.high-contrast a { color: #ff6b6b !important; }
+    body.high-contrast .appt-block,
+    body.high-contrast .resource-card { background: #1a1a1a !important; border-left-color: var(--red) !important; }
+    body.high-contrast .counselor-details h2 { color: var(--red) !important; }
+    body.high-contrast .crisis-card { background: rgba(255,255,255,0.05) !important; }
+    body.high-contrast .crisis-label { color: #fff !important; }
+    body.high-contrast .photo-hint { color: #aaa !important; }
+    body.high-contrast .dept { color: #bbb !important; }
+    body.high-contrast #edit-toolbar { background: #000 !important; border-bottom: 1px solid #444; }
+    body.high-contrast .slide-footer { background: #1a0002 !important; }
+
+    /* ── Print Layout ── */
+    @media print {
+      /* Unsnap the scroll container */
+      #slide-container {
+        height: auto !important;
+        overflow: visible !important;
+        scroll-snap-type: none !important;
+        padding-top: 0 !important;
+      }
+
+      /* Stack slides as pages */
+      .slide {
+        height: auto !important;
+        min-height: 100vh;
+        scroll-snap-align: none !important;
+        overflow: visible !important;
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 1.5rem 2rem;
+      }
+
+      /* Force all slide content visible (override opacity:0 pre-animation state) */
+      .slide .slide-content,
+      .slide .slide-1-content,
+      .slide .slide-2-layout,
+      .slide-footer {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+
+      /* Black text on white backgrounds */
+      body, .slide, .content-card, .appt-block, .resource-card {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      #slide-1 { background: #fff !important; }
+      #slide-7 { background: #fff !important; }
+      #slide-1 h1, #slide-1 .subtitle { color: #000 !important; }
+      .slide-heading { color: #000 !important; border-bottom-color: #000 !important; }
+      h1, h2, h3, h4, h5, h6, p, li { color: #000 !important; }
+      a { color: #000 !important; text-decoration: underline; }
+      .crisis-number { color: #000 !important; }
+      .crisis-label { color: #000 !important; }
+      .crisis-sub { color: #444 !important; }
+      .crisis-card { background: #f5f5f5 !important; border-color: #000 !important; }
+      .slide-footer { background: #000 !important; color: #fff !important; position: relative !important; }
+
+      /* Minimum 11pt font */
+      body { font-size: 11pt !important; }
+
+      /* Hide all UI chrome */
+      #edit-toolbar,
+      #slide-progress,
+      #btn-edit-corner,
+      .photo-hint,
+      #qr-label { display: none !important; }
+
+      /* Show QR block prominently on slide 1 */
+      #qr-block { display: flex !important; }
+      #qr-code { display: block !important; }
+
+      /* No page break inside content blocks */
+      .content-card, .appt-block, .resource-card, .crisis-grid { page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="edit-toolbar" aria-label="Edit toolbar">
+    <span class="edit-indicator">✏️ Edit Mode</span>
+    <div class="toolbar-controls">
+      <button id="btn-font-down" aria-label="Decrease font size">A−</button>
+      <button id="btn-font-up" aria-label="Increase font size">A+</button>
+      <button id="btn-contrast" aria-label="Toggle high contrast mode">◑ Contrast</button>
+      <label for="qr-url-input" class="qr-label-text">QR URL:</label>
+      <input type="url" id="qr-url-input" placeholder="https://your-page-url" aria-label="URL for QR code" />
+      <button id="btn-finalize" aria-label="Finalize and lock page">✔ Finalize</button>
+    </div>
+  </nav>
+
+  <main><div id="slide-container">
+
+    <section class="slide" id="slide-1">
+      <div class="slide-content slide-1-content">
+        <!-- Lee College logo — click to replace with a local file -->
+        <div class="logo-wrap">
+          <img id="college-logo"
+               src="logo-footer.png"
+               alt="Lee College"
+               title="Click to replace logo"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%2280%22%3E%3Crect width=%22220%22 height=%2280%22 fill=%22rgba(255,255,255,0.15)%22 rx=%228%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Georgia,serif%22 font-size=%2218%22 fill=%22white%22%3ELee College%3C/text%3E%3C/svg%3E'" />
+          <input type="file" accept="image/*" id="logo-input" style="display:none" aria-label="Upload college logo" />
+          <p class="logo-hint">Click logo to replace</p>
+        </div>
+        <h1>Campus Counseling Resources</h1>
+        <p class="subtitle placeholder">[Subtitle / Tagline]</p>
+        <div id="qr-block">
+          <div id="qr-code"></div>
+          <p id="qr-label">Scan to access this page on your phone</p>
+          <p id="qr-fallback" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-2">
+      <div class="slide-content slide-2-layout">
+        <div class="counselor-photo-wrap">
+          <img id="counselor-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='%23999'%3E%5BPhoto%5D%3C/text%3E%3C/svg%3E" alt="[Counselor Photo] — click to replace" title="Click to replace photo" />
+          <input type="file" accept="image/*" id="photo-input" style="display:none" aria-label="Upload counselor photo" />
+          <p class="photo-hint">Click photo to replace</p>
+        </div>
+        <div class="counselor-details">
+          <h2 class="placeholder">[Counselor Name]</h2>
+          <p class="credential placeholder">[Degree / Credentials]</p>
+          <p class="contact placeholder">[Contact Information]</p>
+          <p class="dept">Lee College Counseling Services</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-3">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading">How I Can Help</h2>
+        <ul class="help-list">
+          <li>Provides confidential, short-term therapeutic services</li>
+          <li>Helps students cope with depression, anxiety, stress, low self-esteem, and related issues</li>
+          <li>Conducts individual and group therapy sessions (in-person or virtual) for students 18 and older</li>
+          <li>Participates in the CARES Team as a collaborator and resource</li>
+          <li>Coordinates mental health education and prevention programming</li>
+          <li>Develops community referral relationships</li>
+          <li>Responds to campus crises as needed</li>
+          <li>Supports Title IX reporting with confidential assistance</li>
+          <li>Promotes TimelyCare utilization for 24/7 student support</li>
+          <li>Maintains confidential records per ethical and licensing standards</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-4">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading">On-Campus Counseling</h2>
+        <p class="slide-intro">Confidential counseling services are available to all currently enrolled Lee College students (age 18+).</p>
+        <div class="appt-block">
+          <h3>How to Make an Appointment</h3>
+          <p>Contact <span class="placeholder">[Counselor Name]</span> directly:</p>
+          <p class="contact-detail placeholder">[Contact Information]</p>
+          <p>Sessions are available <strong>in-person</strong> and <strong>virtually</strong>.</p>
+        </div>
+        <p class="confidential-note">🔒 All sessions are strictly confidential.</p>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-5">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading">TimelyCare</h2>
+        <p class="slide-intro">Lee College partners with <strong>TimelyCare</strong> to provide free, 24/7 telehealth and mental health support for all enrolled students.</p>
+        <div class="resource-card">
+          <div class="resource-icon">📱</div>
+          <div class="resource-details">
+            <h3>Access TimelyCare</h3>
+            <p>Visit <a href="https://timely.care/lee" target="_blank" rel="noopener">timely.care/lee</a> or download the TimelyCare app.</p>
+            <ul class="feature-list">
+              <li>Available 24 hours a day, 7 days a week</li>
+              <li>Free for all currently enrolled Lee College students</li>
+              <li>Talk to a counselor, medical provider, or health coach</li>
+              <li>Completely confidential</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-6">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading">CARES Team</h2>
+        <p class="slide-intro">The <strong>Campus Assessment, Response, and Evaluation (CARES) Team</strong> coordinates support for students experiencing difficulties that may affect their safety or academic success.</p>
+        <div class="resource-card">
+          <div class="resource-icon">🤝</div>
+          <div class="resource-details">
+            <h3>Submit a CARES Referral</h3>
+            <p>If you are concerned about yourself or another student, submit a referral:</p>
+            <p><a href="https://cm.maxient.com/reportingform.php?LeeCollege&layout_id=2" target="_blank" rel="noopener">Lee College CARES Referral Form</a></p>
+            <ul class="feature-list">
+              <li>Anonymous referrals accepted</li>
+              <li>Team includes counselors, faculty, and student services staff</li>
+              <li>Connects students with appropriate campus and community resources</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-7">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading crisis-heading">Crisis Resources</h2>
+        <p class="slide-intro">If you or someone you know is in crisis, please reach out immediately.</p>
+        <div class="crisis-grid">
+          <div class="crisis-card">
+            <div class="crisis-number">988</div>
+            <div class="crisis-label">National Suicide &amp; Crisis Lifeline</div>
+            <div class="crisis-sub">Call or text 988 — available 24/7</div>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-number">741741</div>
+            <div class="crisis-label">Crisis Text Line</div>
+            <div class="crisis-sub">Text HOME to 741741</div>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-number">281.425.6540</div>
+            <div class="crisis-label">Lee College Campus Security</div>
+            <div class="crisis-sub">On-campus emergencies</div>
+          </div>
+          <div class="crisis-card crisis-card--emergency">
+            <div class="crisis-number">911</div>
+            <div class="crisis-label">Emergency Services</div>
+            <div class="crisis-sub">Life-threatening emergencies</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-8">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading">Additional Resources</h2>
+        <div class="about-block">
+          <h3>About Me</h3>
+          <p class="placeholder">[Background / About Me]</p>
+        </div>
+        <div class="credentials-block">
+          <h3>Credentials</h3>
+          <ul class="feature-list">
+            <li>Master's degree or higher in Counseling, Clinical Psychology, or Social Work</li>
+            <li>Texas state license: Licensed Professional Counselor (LPC) or Licensed Clinical Social Worker (LCSW)</li>
+            <li>2+ years of counseling experience in a mental health setting</li>
+          </ul>
+        </div>
+        <div class="more-resources">
+          <h3>More Mental Health Resources</h3>
+          <p><a href="https://www.lee.edu/cares-team/mental-health-resources/index.php" target="_blank" rel="noopener">Lee College Mental Health Resources →</a></p>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <p>200 Lee Drive, Baytown, TX 77520 &nbsp;|&nbsp; 281.427.5611</p>
+        <p>© Lee College</p>
+      </footer>
+    </section>
+
+  </div></main>
+
+  <script>
+    // ── Constants ──
+    const EDITABLE_SELECTOR = 'h1, h2, h3, h4, h5, h6, p, li, span[data-editable], .crisis-number, .crisis-label, .crisis-sub';
+    const FONT_MIN = 14, FONT_MAX = 24, FONT_STEP = 2;
+    let currentFontSize = 16;
+    let highContrast = false;
+
+    // ── QR Code ──
+    function generateQR(url) {
+      const container = document.getElementById('qr-code');
+      const fallback = document.getElementById('qr-fallback');
+      container.innerHTML = '';
+      fallback.hidden = true;
+      if (!url || url === '[Presentation URL]') return;
+      try {
+        new QRCode(container, { text: url, width: 120, height: 120, colorDark: '#000000', colorLight: '#ffffff' });
+      } catch(e) {
+        container.style.display = 'none';
+        fallback.textContent = url;
+        fallback.hidden = false;
+      }
+    }
+
+    // ── Edit Mode ──
+    function enterEditMode() {
+      document.body.dataset.mode = 'edit';
+      document.querySelectorAll(EDITABLE_SELECTOR).forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+      });
+    }
+
+    // ── Finalized Mode ──
+    function enterFinalizedMode() {
+      document.querySelectorAll('[contenteditable]').forEach(el => {
+        el.removeAttribute('contenteditable');
+      });
+      document.body.dataset.mode = 'finalized';
+      // Offer download
+      try {
+        const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'counselor-presentation-final.html';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch(e) {
+        // fallback: open in new tab
+        const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        window.open('data:text/html,' + encodeURIComponent(html));
+      }
+    }
+
+    // ── Image swap ──
+    function setupImageSwap() {
+      const photo = document.getElementById('counselor-photo');
+      const input = document.getElementById('photo-input');
+      if (!photo || !input) return;
+      photo.addEventListener('click', function() {
+        if (document.body.dataset.mode !== 'edit') return;
+        if (!window.FileReader) { alert('Image replacement requires a modern browser.'); return; }
+        input.click();
+      });
+      input.addEventListener('change', function() {
+        if (!this.files || !this.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          photo.src = e.target.result;
+          photo.alt = 'Counselor photo';
+        };
+        reader.readAsDataURL(this.files[0]);
+      });
+    }
+
+    // ── DOMContentLoaded ──
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load localStorage prefs
+      try {
+        const savedSize = parseInt(localStorage.getItem('lc-font-size'));
+        if (savedSize >= FONT_MIN && savedSize <= FONT_MAX) currentFontSize = savedSize;
+        highContrast = localStorage.getItem('lc-high-contrast') === 'true';
+      } catch(e) {}
+      document.documentElement.style.fontSize = currentFontSize + 'px';
+      if (highContrast) document.body.classList.add('high-contrast');
+
+      // Enter edit mode
+      enterEditMode();
+
+      // Wire toolbar buttons
+      document.getElementById('btn-finalize').addEventListener('click', enterFinalizedMode);
+      document.getElementById('btn-edit-corner').addEventListener('click', enterEditMode);
+      document.getElementById('btn-font-up').addEventListener('click', function() {
+        currentFontSize = Math.min(currentFontSize + FONT_STEP, FONT_MAX);
+        document.documentElement.style.fontSize = currentFontSize + 'px';
+        try { localStorage.setItem('lc-font-size', currentFontSize); } catch(e) {}
+      });
+      document.getElementById('btn-font-down').addEventListener('click', function() {
+        currentFontSize = Math.max(currentFontSize - FONT_STEP, FONT_MIN);
+        document.documentElement.style.fontSize = currentFontSize + 'px';
+        try { localStorage.setItem('lc-font-size', currentFontSize); } catch(e) {}
+      });
+      document.getElementById('btn-contrast').addEventListener('click', function() {
+        highContrast = !highContrast;
+        document.body.classList.toggle('high-contrast', highContrast);
+        try { localStorage.setItem('lc-high-contrast', highContrast); } catch(e) {}
+      });
+
+      // Wire QR URL input
+      document.getElementById('qr-url-input').addEventListener('input', function() {
+        generateQR(this.value);
+      });
+
+      // Setup image swap
+      setupImageSwap();
+
+      // ── Logo swap ──
+      (function() {
+        const logo = document.getElementById('college-logo');
+        const logoInput = document.getElementById('logo-input');
+        if (!logo || !logoInput) return;
+        logo.addEventListener('click', function() {
+          if (document.body.dataset.mode !== 'edit') return;
+          if (!window.FileReader) { alert('Image replacement requires a modern browser.'); return; }
+          logoInput.click();
+        });
+        logoInput.addEventListener('change', function() {
+          if (!this.files || !this.files[0]) return;
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            logo.src = e.target.result;
+            logo.alt = 'College logo';
+          };
+          reader.readAsDataURL(this.files[0]);
+        });
+      })();
+
+      // ── Intersection Observer for slide animations ──
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      let currentSlideIndex = 0;
+
+      const slideObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            // Update current slide index
+            currentSlideIndex = slides.indexOf(entry.target);
+            slideObserver.unobserve(entry.target); // fire once per slide
+          }
+        });
+      }, { threshold: 0.4, root: document.getElementById('slide-container') });
+
+      slides.forEach(function(slide) {
+        slideObserver.observe(slide);
+      });
+
+      // ── Progress dots ──
+      const dots = Array.from(document.querySelectorAll('.dot'));
+      const slideContainer = document.getElementById('slide-container');
+
+      function scrollToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+        slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function updateActiveDot(index) {
+        dots.forEach(function(d, i) {
+          d.classList.toggle('active', i === index);
+        });
+      }
+
+      // Update active dot when slides animate in (reuse slideObserver logic)
+      // We need a separate observer that doesn't unobserve, for dot tracking
+      const dotObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            const idx = slides.indexOf(entry.target);
+            if (idx !== -1) {
+              currentSlideIndex = idx;
+              updateActiveDot(idx);
+            }
+          }
+        });
+      }, { threshold: 0.5, root: slideContainer });
+
+      slides.forEach(function(slide) { dotObserver.observe(slide); });
+
+      // Dot click navigation
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          const idx = parseInt(this.dataset.slide);
+          scrollToSlide(idx);
+        });
+      });
+
+      // ── Keyboard navigation ──
+      document.addEventListener('keydown', function(e) {
+        // Don't hijack keyboard when user is editing text
+        if (document.activeElement && document.activeElement.getAttribute('contenteditable') === 'true') return;
+        if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+
+        if (['ArrowDown', 'ArrowRight', 'PageDown'].includes(e.key)) {
+          e.preventDefault();
+          scrollToSlide(currentSlideIndex + 1);
+        }
+        if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) {
+          e.preventDefault();
+          scrollToSlide(currentSlideIndex - 1);
+        }
+      });
+
+      // ── Print guard ──
+      window.addEventListener('beforeprint', function() {
+        if (document.body.dataset.mode === 'edit') {
+          // Force all animated content visible for print
+          document.querySelectorAll('.slide .slide-content, .slide .slide-1-content, .slide .slide-2-layout, .slide-footer').forEach(function(el) {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+          });
+        }
+      });
+    });
+  </script>
+  <nav id="slide-progress" aria-label="Slide navigation">
+    <button class="dot active" data-slide="0" aria-label="Go to slide 1"></button>
+    <button class="dot" data-slide="1" aria-label="Go to slide 2"></button>
+    <button class="dot" data-slide="2" aria-label="Go to slide 3"></button>
+    <button class="dot" data-slide="3" aria-label="Go to slide 4"></button>
+    <button class="dot" data-slide="4" aria-label="Go to slide 5"></button>
+    <button class="dot" data-slide="5" aria-label="Go to slide 6"></button>
+    <button class="dot" data-slide="6" aria-label="Go to slide 7"></button>
+    <button class="dot" data-slide="7" aria-label="Go to slide 8"></button>
+  </nav>
+  <button id="btn-edit-corner" aria-label="Return to edit mode">✏️ Edit</button>
+
+</body>
+</html>
