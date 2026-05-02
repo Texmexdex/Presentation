@@ -144,6 +144,47 @@
       .slide-2-layout { flex-direction: column; gap: 1.5rem; }
     }
 
+    /* ── Slide About Me ── */
+    #slide-about {
+      background: var(--light-grey);
+    }
+    .about-statement {
+      max-width: 650px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      text-align: center;
+    }
+    .about-statement .slide-heading {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .about-quote {
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: var(--charcoal);
+    }
+    .about-tags {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .about-tag { padding: 0.35rem 0.9rem; border-radius: 4px; font-size: 0.8rem; font-weight: normal; letter-spacing: 0.02em; color: #aaa; border: none; background: transparent; }
+    .about-tag--red { background: transparent; color: #aaa; }
+    .about-tag--dark { background: transparent; color: #aaa; }
+    .about-closing {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--charcoal);
+      font-style: italic;
+      border-top: 2px solid var(--red);
+      padding-top: 1rem;
+      max-width: 550px;
+    }
+
     /* ── Shared content card ── */
     .content-card {
       max-width: 800px;
@@ -476,6 +517,7 @@
     #slide-1.animate-in .slide-content,
     #slide-1.animate-in .slide-1-content  { animation: fadeIn 0.8s ease forwards; }
     #slide-2.animate-in .slide-2-layout   { animation: slideFromLeft 0.7s ease forwards; }
+    #slide-about.animate-in .slide-content { animation: fadeIn 0.8s ease forwards; }
     #slide-3.animate-in .slide-content    { animation: slideFromRight 0.7s ease forwards; }
     #slide-4.animate-in .slide-content    { animation: zoomIn 0.7s ease forwards; }
     #slide-5.animate-in .slide-content    { animation: slideFromBottom 0.7s ease forwards; }
@@ -664,6 +706,18 @@
       </div>
     </section>
 
+    <section class="slide" id="slide-about">
+      <div class="slide-content about-statement">
+        <h2 class="slide-heading">About Me</h2>
+        <p class="about-quote">My academic journey started right here in these seats, just like my father and my children. The start I got here paved the way for my two Master's degrees and my Doctorate.</p>
+        <p class="about-closing">I am here for one reason — to help you navigate your own path to success. Your goals are my priority.</p>
+        <div class="about-tags">
+          <span class="about-tag about-tag--red">Solution-Focused Counseling</span>
+          <span class="about-tag about-tag--dark">Community Driven</span>
+        </div>
+      </div>
+    </section>
+
     <section class="slide animate-in" id="slide-3">
       <div class="slide-content content-card">
         <h2 class="slide-heading">How I Can Help</h2>
@@ -847,8 +901,6 @@
       document.addEventListener('keydown', function(e) {
         if (['ArrowDown','ArrowRight','PageDown'].indexOf(e.key) !== -1) {
           e.preventDefault();
-          // On slide 3, reveal next bullet first
-          if (currentSlideIndex === 2 && revealNextOnSlide3()) return;
           if (currentSlideIndex < slides.length - 1) slides[currentSlideIndex + 1].scrollIntoView({behavior:'smooth'});
         }
         if (['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key) !== -1) {
@@ -857,58 +909,32 @@
         }
       });
 
-      // ── Reveal system ──
-      // Slide 3 only: click-to-reveal bullet points
-      var slide3 = document.getElementById('slide-3');
-      if (slide3) {
-        slide3.querySelectorAll('.help-list li').forEach(function(item) {
-          item.classList.add('reveal-item');
-        });
-      }
-
-      // Slides 4-7: auto-reveal items sequentially when slide animates in
-      [4,5,6,7].forEach(function(num) {
-        var slide = document.getElementById('slide-' + num);
-        if (!slide) return;
-        var items = slide.querySelectorAll('.feature-list li, .appt-block, .resource-card, .crisis-card, .confidential-note, .slide-intro');
+      // ── Auto-reveal system — all content slides ──
+      // Mark items on slides 3-7 (and slide-about) as reveal-items
+      slides.forEach(function(slide) {
+        var sid = slide.id;
+        if (sid === 'slide-1' || sid === 'slide-2' || sid === 'slide-about' || sid === 'slide-8') return;
+        var items = slide.querySelectorAll('.help-list li, .feature-list li, .appt-block, .resource-card, .crisis-card, .confidential-note, .slide-intro');
         items.forEach(function(item) { item.classList.add('reveal-item'); });
       });
 
-      // Auto-reveal observer for slides 4-7
-      var autoRevealObserver = new IntersectionObserver(function(entries) {
+      // Auto-reveal observer — sequential reveal when slide scrolls in
+      var revealObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            var slideNum = parseInt(entry.target.id.replace('slide-', ''));
-            if (slideNum >= 4 && slideNum <= 7) {
-              var items = entry.target.querySelectorAll('.reveal-item:not(.revealed)');
-              items.forEach(function(item, i) {
-                setTimeout(function() { item.classList.add('revealed'); }, i * 150);
-              });
-            }
-            autoRevealObserver.unobserve(entry.target);
+            var items = entry.target.querySelectorAll('.reveal-item:not(.revealed)');
+            items.forEach(function(item, i) {
+              setTimeout(function() { item.classList.add('revealed'); }, i * 150);
+            });
+            revealObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.5, root: container });
+      }, { threshold: 0.4, root: container });
 
-      [4,5,6,7].forEach(function(num) {
-        var s = document.getElementById('slide-' + num);
-        if (s) autoRevealObserver.observe(s);
-      });
-
-      // Click-to-reveal for slide 3 only
-      function revealNextOnSlide3() {
-        if (!slide3) return false;
-        var hidden = slide3.querySelector('.reveal-item:not(.revealed)');
-        if (hidden) { hidden.classList.add('revealed'); return true; }
-        return false;
-      }
-
-      container.addEventListener('click', function(e) {
-        if (e.target.closest('#slide-progress') || e.target.closest('a') || e.target.closest('button')) return;
-        if (currentSlideIndex === 2) { // slide-3 is index 2
-          if (!revealNextOnSlide3()) {
-            if (currentSlideIndex < slides.length - 1) slides[currentSlideIndex + 1].scrollIntoView({behavior:'smooth'});
-          }
+      slides.forEach(function(slide) {
+        var sid = slide.id;
+        if (sid !== 'slide-1' && sid !== 'slide-2' && sid !== 'slide-about' && sid !== 'slide-8') {
+          revealObserver.observe(slide);
         }
       });
 
@@ -924,6 +950,7 @@
     <button class="dot" data-slide="5" aria-label="Go to slide 6"></button>
     <button class="dot" data-slide="6" aria-label="Go to slide 7"></button>
     <button class="dot" data-slide="7" aria-label="Go to slide 8"></button>
+    <button class="dot" data-slide="8" aria-label="Go to slide 9"></button>
   </nav>
 
 
