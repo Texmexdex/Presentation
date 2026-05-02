@@ -1,24 +1,7 @@
-<!--
-  CAMPUS COUNSELOR PRESENTATION — PLACEHOLDER HINTS
-  ==================================================
-  Placeholders to fill in before distributing:
-    [Counselor Name]       — Your full name
-    [Degree / Credentials] — e.g., PhD, LPC, LCSW
-    [Background / About Me]— Brief professional bio
-    [Contact Information]  — Office location, phone, email
-    [Presentation URL]     — URL where this page is hosted (for QR code)
-
-  INSTRUCTIONS:
-  Open in browser. Page loads in Edit Mode.
-  Click any text to edit it.
-  Click the photo to replace it.
-  Click Finalize when done.
--->
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en" style="font-size: 20px;"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campus Counseling Resources</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -107,13 +90,26 @@
       gap: 0.5rem;
       flex-shrink: 0;
     }
-    #counselor-photo {
+    .photo-frame {
       width: 180px;
       height: 180px;
       border-radius: 50%;
-      object-fit: cover;
       border: 4px solid var(--red);
-      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+    }
+    .photo-frame:active { cursor: grabbing; }
+    #counselor-photo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
     }
     .photo-hint {
       font-size: 0.75rem;
@@ -382,10 +378,10 @@
     #qr-url-input::placeholder { color: rgba(255,255,255,0.4); }
 
     /* Offset slides so toolbar doesn't cover content */
-    body[data-mode="edit"] #slide-container { padding-top: 44px; height: calc(100vh); }
+    body[data-mode="finalized"] #slide-container { padding-top: 44px; height: calc(100vh); }
 
     /* ── Placeholder styling in Edit Mode ── */
-    [data-mode="edit"] .placeholder {
+    [data-mode="finalized"] .placeholder {
       border: 1.5px dashed #aaa;
       border-radius: 3px;
       padding: 2px 6px;
@@ -394,7 +390,7 @@
       min-width: 80px;
       display: inline-block;
     }
-    [data-mode="edit"] [contenteditable]:focus {
+    [data-mode="finalized"] [contenteditable]:focus {
       outline: 2px solid var(--red);
       outline-offset: 2px;
       border-radius: 2px;
@@ -497,6 +493,18 @@
     #slide-6.animate-in .feature-list li:nth-child(2) { animation-delay: 0.5s; }
     #slide-6.animate-in .feature-list li:nth-child(3) { animation-delay: 0.7s; }
 
+    /* ── Click-to-reveal bullet points ── */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+    .reveal-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
     /* ── Slide Progress Indicator ── */
     #slide-progress {
       position: fixed;
@@ -619,93 +627,86 @@
     }
   </style>
 </head>
-<body>
+<body data-mode="finalized">
 
-  <nav id="edit-toolbar" aria-label="Edit toolbar">
-    <span class="edit-indicator">✏️ Edit Mode</span>
-    <div class="toolbar-controls">
-      <button id="btn-font-down" aria-label="Decrease font size">A−</button>
-      <button id="btn-font-up" aria-label="Increase font size">A+</button>
-      <button id="btn-contrast" aria-label="Toggle high contrast mode">◑ Contrast</button>
-      <label for="qr-url-input" class="qr-label-text">QR URL:</label>
-      <input type="url" id="qr-url-input" placeholder="https://your-page-url" aria-label="URL for QR code" />
-      <button id="btn-finalize" aria-label="Finalize and lock page">✔ Finalize</button>
-    </div>
-  </nav>
+  
 
   <main><div id="slide-container">
 
-    <section class="slide" id="slide-1">
+    <section class="slide animate-in" id="slide-1">
       <div class="slide-content slide-1-content">
         <!-- Lee College logo — click to replace with a local file -->
         <div class="logo-wrap">
-          <img id="college-logo"
-               src="logo-footer.png"
-               alt="Lee College"
-               title="Click to replace logo"
-               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%2280%22%3E%3Crect width=%22220%22 height=%2280%22 fill=%22rgba(255,255,255,0.15)%22 rx=%228%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Georgia,serif%22 font-size=%2218%22 fill=%22white%22%3ELee College%3C/text%3E%3C/svg%3E'" />
-          <input type="file" accept="image/*" id="logo-input" style="display:none" aria-label="Upload college logo" />
-          <p class="logo-hint">Click logo to replace</p>
+          <img id="college-logo" src="logo-footer.png" alt="Lee College" title="Click to replace logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%2280%22%3E%3Crect width=%22220%22 height=%2280%22 fill=%22rgba(255,255,255,0.15)%22 rx=%228%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Georgia,serif%22 font-size=%2218%22 fill=%22white%22%3ELee College%3C/text%3E%3C/svg%3E'">
+          
+          
         </div>
         <h1>Campus Counseling Resources</h1>
-        <p class="subtitle placeholder">[Subtitle / Tagline]</p>
-        <div id="qr-block">
-          <div id="qr-code"></div>
-          <p id="qr-label">Scan to access this page on your phone</p>
-          <p id="qr-fallback" hidden></p>
-        </div>
-      </div>
+        <p class="subtitle">Prioritizing your mental health and academic success</p>
+        
     </section>
 
-    <section class="slide" id="slide-2">
+    <section class="slide animate-in" id="slide-2">
       <div class="slide-content slide-2-layout">
         <div class="counselor-photo-wrap">
-          <img id="counselor-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23ddd'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='%23999'%3E%5BPhoto%5D%3C/text%3E%3C/svg%3E" alt="[Counselor Photo] — click to replace" title="Click to replace photo" />
-          <input type="file" accept="image/*" id="photo-input" style="display:none" aria-label="Upload counselor photo" />
-          <p class="photo-hint">Click photo to replace</p>
+          <div class="photo-frame" id="photo-frame">
+            <img id="counselor-photo" src="1.jpg" alt="[Counselor Photo]" style="object-position: 49.3333% 23.3333%;">
+          </div>
+          
+          
         </div>
         <div class="counselor-details">
-          <h2 class="placeholder">[Counselor Name]</h2>
-          <p class="credential placeholder">[Degree / Credentials]</p>
-          <p class="contact placeholder">[Contact Information]</p>
+          <h2>Kimberly Rawlinson-Stevenson</h2>
+          <p class="credential">Ed.D., LPC</p>
+          <p class="contact">281.427.5661</p>
           <p class="dept">Lee College Counseling Services</p>
         </div>
       </div>
     </section>
 
-    <section class="slide" id="slide-3">
+    <section class="slide animate-in" id="slide-3">
       <div class="slide-content content-card">
         <h2 class="slide-heading">How I Can Help</h2>
         <ul class="help-list">
-          <li>Provides confidential, short-term therapeutic services</li>
-          <li>Helps students cope with depression, anxiety, stress, low self-esteem, and related issues</li>
-          <li>Conducts individual and group therapy sessions (in-person or virtual) for students 18 and older</li>
-          <li>Participates in the CARES Team as a collaborator and resource</li>
-          <li>Coordinates mental health education and prevention programming</li>
-          <li>Develops community referral relationships</li>
-          <li>Responds to campus crises as needed</li>
-          <li>Supports Title IX reporting with confidential assistance</li>
-          <li>Promotes TimelyCare utilization for 24/7 student support</li>
-          <li>Maintains confidential records per ethical and licensing standards</li>
+          <li>Provide confidential, short-term therapeutic services</li>
+          <li>Help students cope with depression, anxiety, stress, low self-esteem, and related issues</li>
+          <li>Conduct individual and group therapy sessions (in-person or virtual) for students 18 and older</li>
+          <li>Participate in the CARES Team as a collaborator and resource</li>
+          <li>Coordinate mental health education and prevention programming</li>
+          <li>Develop community referral relationships</li>
+          <li>Respond to campus crises as needed</li>
+          <li>Support Title IX reporting with confidential assistance</li>
+          <li>Promote TimelyCare utilization for 24/7 student support</li>
+          <li>Maintain confidential records per ethical and licensing standards</li>
         </ul>
       </div>
     </section>
 
-    <section class="slide" id="slide-4">
+    <section class="slide animate-in" id="slide-4">
       <div class="slide-content content-card">
         <h2 class="slide-heading">On-Campus Counseling</h2>
-        <p class="slide-intro">Confidential counseling services are available to all currently enrolled Lee College students (age 18+).</p>
+        <p class="slide-intro">Confidential, short-term counseling services are available to all currently enrolled Lee College students (age 18+), both in-person and virtually.</p>
         <div class="appt-block">
           <h3>How to Make an Appointment</h3>
-          <p>Contact <span class="placeholder">[Counselor Name]</span> directly:</p>
-          <p class="contact-detail placeholder">[Contact Information]</p>
-          <p>Sessions are available <strong>in-person</strong> and <strong>virtually</strong>.</p>
+          <ul class="feature-list">
+            <li>Contact <span>Kimberly Rawlinson-Stevenson</span> directly at <span>281.427.5661</span></li>
+            <li>Submit a referral through the <strong>CARES Team</strong> at <a href="https://www.lee.edu/behavioral-intervention-team" target="_blank" rel="noopener">lee.edu/behavioral-intervention-team</a> or email <a href="mailto:bit@lee.edu">bit@lee.edu</a></li>
+            <li>Visit the <strong>Advising and Transfer Center</strong> (Rundell Hall, Room 100) — staff can connect you with counseling services</li>
+            <li>Use <strong>TimelyCare</strong> for immediate 24/7 virtual support at <a href="https://timely.care/lee" target="_blank" rel="noopener">timely.care/lee</a></li>
+          </ul>
+        </div>
+        <div class="appt-block">
+          <h3>Additional On-Campus Support</h3>
+          <ul class="feature-list">
+            <li><strong>Access Center</strong> (Rundell Hall, Room 101) — accommodations and advising for students with disabilities, including psychiatric diagnoses · 281.425.6217 · <a href="https://www.lee.edu/disabilities" target="_blank" rel="noopener">lee.edu/disabilities</a></li>
+            <li><strong>Veterans Center</strong> (Rundell Hall, Room 108) — support and counseling for veterans and dependents, including PTSD · 832.556.4302 · <a href="https://www.lee.edu/veterans" target="_blank" rel="noopener">lee.edu/veterans</a></li>
+          </ul>
         </div>
         <p class="confidential-note">🔒 All sessions are strictly confidential.</p>
       </div>
     </section>
 
-    <section class="slide" id="slide-5">
+    <section class="slide animate-in" id="slide-5">
       <div class="slide-content content-card">
         <h2 class="slide-heading">TimelyCare</h2>
         <p class="slide-intro">Lee College partners with <strong>TimelyCare</strong> to provide free, 24/7 telehealth and mental health support for all enrolled students.</p>
@@ -725,7 +726,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-6">
+    <section class="slide animate-in" id="slide-6">
       <div class="slide-content content-card">
         <h2 class="slide-heading">CARES Team</h2>
         <p class="slide-intro">The <strong>Campus Assessment, Response, and Evaluation (CARES) Team</strong> coordinates support for students experiencing difficulties that may affect their safety or academic success.</p>
@@ -734,7 +735,7 @@
           <div class="resource-details">
             <h3>Submit a CARES Referral</h3>
             <p>If you are concerned about yourself or another student, submit a referral:</p>
-            <p><a href="https://cm.maxient.com/reportingform.php?LeeCollege&layout_id=2" target="_blank" rel="noopener">Lee College CARES Referral Form</a></p>
+            <p><a href="https://cm.maxient.com/reportingform.php?LeeCollege&amp;layout_id=2" target="_blank" rel="noopener">Lee College CARES Referral Form</a></p>
             <ul class="feature-list">
               <li>Anonymous referrals accepted</li>
               <li>Team includes counselors, faculty, and student services staff</li>
@@ -745,7 +746,7 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-7">
+    <section class="slide animate-in" id="slide-7">
       <div class="slide-content content-card">
         <h2 class="slide-heading crisis-heading">Crisis Resources</h2>
         <p class="slide-intro">If you or someone you know is in crisis, please reach out immediately.</p>
@@ -774,257 +775,146 @@
       </div>
     </section>
 
-    <section class="slide" id="slide-8">
-      <div class="slide-content content-card">
-        <h2 class="slide-heading">Additional Resources</h2>
-        <div class="about-block">
-          <h3>About Me</h3>
-          <p class="placeholder">[Background / About Me]</p>
-        </div>
-        <div class="credentials-block">
-          <h3>Credentials</h3>
-          <ul class="feature-list">
-            <li>Master's degree or higher in Counseling, Clinical Psychology, or Social Work</li>
-            <li>Texas state license: Licensed Professional Counselor (LPC) or Licensed Clinical Social Worker (LCSW)</li>
-            <li>2+ years of counseling experience in a mental health setting</li>
-          </ul>
-        </div>
-        <div class="more-resources">
-          <h3>More Mental Health Resources</h3>
-          <p><a href="https://www.lee.edu/cares-team/mental-health-resources/index.php" target="_blank" rel="noopener">Lee College Mental Health Resources →</a></p>
-        </div>
+    <section class="slide animate-in" id="slide-8" style="background: var(--red); color: var(--white);">
+      <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;text-align:center;opacity:1;">
+        <h2 style="color:#fff;font-size:clamp(1.5rem,3vw,2.2rem);border-bottom:3px solid rgba(255,255,255,0.3);padding-bottom:0.5rem;">Take This With You</h2>
+        <p style="color:rgba(255,255,255,0.85);font-size:1rem;max-width:500px;">Scan the QR code below to download this presentation as a PDF on your device.</p>
+        <div id="qr-download" style="display:inline-block;"></div>
       </div>
-      <footer class="slide-footer">
-        <p>200 Lee Drive, Baytown, TX 77520 &nbsp;|&nbsp; 281.427.5611</p>
-        <p>© Lee College</p>
-      </footer>
     </section>
 
   </div></main>
 
   <script>
-    // ── Constants ──
-    const EDITABLE_SELECTOR = 'h1, h2, h3, h4, h5, h6, p, li, span[data-editable], .crisis-number, .crisis-label, .crisis-sub';
-    const FONT_MIN = 14, FONT_MAX = 24, FONT_STEP = 2;
-    let currentFontSize = 16;
-    let highContrast = false;
-
-    // ── QR Code ──
-    function generateQR(url) {
-      const container = document.getElementById('qr-code');
-      const fallback = document.getElementById('qr-fallback');
-      container.innerHTML = '';
-      fallback.hidden = true;
-      if (!url || url === '[Presentation URL]') return;
-      try {
-        new QRCode(container, { text: url, width: 120, height: 120, colorDark: '#000000', colorLight: '#ffffff' });
-      } catch(e) {
-        container.style.display = 'none';
-        fallback.textContent = url;
-        fallback.hidden = false;
-      }
-    }
-
-    // ── Edit Mode ──
-    function enterEditMode() {
-      document.body.dataset.mode = 'edit';
-      document.querySelectorAll(EDITABLE_SELECTOR).forEach(el => {
-        el.setAttribute('contenteditable', 'true');
-      });
-    }
-
-    // ── Finalized Mode ──
-    function enterFinalizedMode() {
-      document.querySelectorAll('[contenteditable]').forEach(el => {
-        el.removeAttribute('contenteditable');
-      });
-      document.body.dataset.mode = 'finalized';
-      // Offer download
-      try {
-        const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        const blob = new Blob([html], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'counselor-presentation-final.html';
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-      } catch(e) {
-        // fallback: open in new tab
-        const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        window.open('data:text/html,' + encodeURIComponent(html));
-      }
-    }
-
-    // ── Image swap ──
-    function setupImageSwap() {
-      const photo = document.getElementById('counselor-photo');
-      const input = document.getElementById('photo-input');
-      if (!photo || !input) return;
-      photo.addEventListener('click', function() {
-        if (document.body.dataset.mode !== 'edit') return;
-        if (!window.FileReader) { alert('Image replacement requires a modern browser.'); return; }
-        input.click();
-      });
-      input.addEventListener('change', function() {
-        if (!this.files || !this.files[0]) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          photo.src = e.target.result;
-          photo.alt = 'Counselor photo';
-        };
-        reader.readAsDataURL(this.files[0]);
-      });
-    }
-
-    // ── DOMContentLoaded ──
     document.addEventListener('DOMContentLoaded', function() {
-      // Load localStorage prefs
-      try {
-        const savedSize = parseInt(localStorage.getItem('lc-font-size'));
-        if (savedSize >= FONT_MIN && savedSize <= FONT_MAX) currentFontSize = savedSize;
-        highContrast = localStorage.getItem('lc-high-contrast') === 'true';
-      } catch(e) {}
-      document.documentElement.style.fontSize = currentFontSize + 'px';
-      if (highContrast) document.body.classList.add('high-contrast');
-
-      // Enter edit mode
-      enterEditMode();
-
-      // Wire toolbar buttons
-      document.getElementById('btn-finalize').addEventListener('click', enterFinalizedMode);
-      document.getElementById('btn-edit-corner').addEventListener('click', enterEditMode);
-      document.getElementById('btn-font-up').addEventListener('click', function() {
-        currentFontSize = Math.min(currentFontSize + FONT_STEP, FONT_MAX);
-        document.documentElement.style.fontSize = currentFontSize + 'px';
-        try { localStorage.setItem('lc-font-size', currentFontSize); } catch(e) {}
-      });
-      document.getElementById('btn-font-down').addEventListener('click', function() {
-        currentFontSize = Math.max(currentFontSize - FONT_STEP, FONT_MIN);
-        document.documentElement.style.fontSize = currentFontSize + 'px';
-        try { localStorage.setItem('lc-font-size', currentFontSize); } catch(e) {}
-      });
-      document.getElementById('btn-contrast').addEventListener('click', function() {
-        highContrast = !highContrast;
-        document.body.classList.toggle('high-contrast', highContrast);
-        try { localStorage.setItem('lc-high-contrast', highContrast); } catch(e) {}
-      });
-
-      // Wire QR URL input
-      document.getElementById('qr-url-input').addEventListener('input', function() {
-        generateQR(this.value);
-      });
-
-      // Setup image swap
-      setupImageSwap();
-
-      // ── Logo swap ──
-      (function() {
-        const logo = document.getElementById('college-logo');
-        const logoInput = document.getElementById('logo-input');
-        if (!logo || !logoInput) return;
-        logo.addEventListener('click', function() {
-          if (document.body.dataset.mode !== 'edit') return;
-          if (!window.FileReader) { alert('Image replacement requires a modern browser.'); return; }
-          logoInput.click();
+      // Generate download QR code
+      var qrEl = document.getElementById('qr-download');
+      if (qrEl && typeof QRCode !== 'undefined') {
+        new QRCode(qrEl, {
+          text: 'https://drive.google.com/file/d/1Pktvqrza8qodP9d-ZyKzLDc-6uvSo9MM/view?usp=sharing',
+          width: 180,
+          height: 180,
+          colorDark: '#ffffff',
+          colorLight: '#B20814'
         });
-        logoInput.addEventListener('change', function() {
-          if (!this.files || !this.files[0]) return;
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            logo.src = e.target.result;
-            logo.alt = 'College logo';
-          };
-          reader.readAsDataURL(this.files[0]);
-        });
-      })();
+      }
 
-      // ── Intersection Observer for slide animations ──
-      const slides = Array.from(document.querySelectorAll('.slide'));
-      let currentSlideIndex = 0;
+      // Strip animate-in so observer can re-trigger them
+      var slides = Array.from(document.querySelectorAll('.slide'));
+      slides.forEach(function(s) { s.classList.remove('animate-in'); });
 
-      const slideObserver = new IntersectionObserver(function(entries) {
+      var currentSlideIndex = 0;
+      var container = document.getElementById('slide-container');
+
+      // Animation observer (fires once per slide)
+      var animObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
-            // Update current slide index
-            currentSlideIndex = slides.indexOf(entry.target);
-            slideObserver.unobserve(entry.target); // fire once per slide
+            animObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.4, root: document.getElementById('slide-container') });
+      }, { threshold: 0.4, root: container });
 
-      slides.forEach(function(slide) {
-        slideObserver.observe(slide);
-      });
+      slides.forEach(function(s) { animObserver.observe(s); });
 
-      // ── Progress dots ──
-      const dots = Array.from(document.querySelectorAll('.dot'));
-      const slideContainer = document.getElementById('slide-container');
-
-      function scrollToSlide(index) {
-        if (index < 0 || index >= slides.length) return;
-        slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Dot tracking observer (stays active)
+      var dots = Array.from(document.querySelectorAll('.dot'));
+      function updateDots(idx) {
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
       }
 
-      function updateActiveDot(index) {
-        dots.forEach(function(d, i) {
-          d.classList.toggle('active', i === index);
-        });
-      }
-
-      // Update active dot when slides animate in (reuse slideObserver logic)
-      // We need a separate observer that doesn't unobserve, for dot tracking
-      const dotObserver = new IntersectionObserver(function(entries) {
+      var dotObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            const idx = slides.indexOf(entry.target);
-            if (idx !== -1) {
-              currentSlideIndex = idx;
-              updateActiveDot(idx);
-            }
+            var idx = slides.indexOf(entry.target);
+            if (idx !== -1) { currentSlideIndex = idx; updateDots(idx); }
           }
         });
-      }, { threshold: 0.5, root: slideContainer });
+      }, { threshold: 0.5, root: container });
 
-      slides.forEach(function(slide) { dotObserver.observe(slide); });
+      slides.forEach(function(s) { dotObserver.observe(s); });
 
-      // Dot click navigation
+      // Dot click nav
       dots.forEach(function(dot) {
         dot.addEventListener('click', function() {
-          const idx = parseInt(this.dataset.slide);
-          scrollToSlide(idx);
+          var idx = parseInt(this.dataset.slide);
+          if (slides[idx]) slides[idx].scrollIntoView({ behavior: 'smooth' });
         });
       });
 
-      // ── Keyboard navigation ──
+      // Keyboard nav
       document.addEventListener('keydown', function(e) {
-        // Don't hijack keyboard when user is editing text
-        if (document.activeElement && document.activeElement.getAttribute('contenteditable') === 'true') return;
-        if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
-
-        if (['ArrowDown', 'ArrowRight', 'PageDown'].includes(e.key)) {
+        if (['ArrowDown','ArrowRight','PageDown'].indexOf(e.key) !== -1) {
           e.preventDefault();
-          scrollToSlide(currentSlideIndex + 1);
+          // On slide 3, reveal next bullet first
+          if (currentSlideIndex === 2 && revealNextOnSlide3()) return;
+          if (currentSlideIndex < slides.length - 1) slides[currentSlideIndex + 1].scrollIntoView({behavior:'smooth'});
         }
-        if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) {
+        if (['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key) !== -1) {
           e.preventDefault();
-          scrollToSlide(currentSlideIndex - 1);
+          if (currentSlideIndex > 0) slides[currentSlideIndex - 1].scrollIntoView({behavior:'smooth'});
         }
       });
 
-      // ── Print guard ──
-      window.addEventListener('beforeprint', function() {
-        if (document.body.dataset.mode === 'edit') {
-          // Force all animated content visible for print
-          document.querySelectorAll('.slide .slide-content, .slide .slide-1-content, .slide .slide-2-layout, .slide-footer').forEach(function(el) {
-            el.style.opacity = '1';
-            el.style.transform = 'none';
-          });
+      // ── Reveal system ──
+      // Slide 3 only: click-to-reveal bullet points
+      var slide3 = document.getElementById('slide-3');
+      if (slide3) {
+        slide3.querySelectorAll('.help-list li').forEach(function(item) {
+          item.classList.add('reveal-item');
+        });
+      }
+
+      // Slides 4-7: auto-reveal items sequentially when slide animates in
+      [4,5,6,7].forEach(function(num) {
+        var slide = document.getElementById('slide-' + num);
+        if (!slide) return;
+        var items = slide.querySelectorAll('.feature-list li, .appt-block, .resource-card, .crisis-card, .confidential-note, .slide-intro');
+        items.forEach(function(item) { item.classList.add('reveal-item'); });
+      });
+
+      // Auto-reveal observer for slides 4-7
+      var autoRevealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var slideNum = parseInt(entry.target.id.replace('slide-', ''));
+            if (slideNum >= 4 && slideNum <= 7) {
+              var items = entry.target.querySelectorAll('.reveal-item:not(.revealed)');
+              items.forEach(function(item, i) {
+                setTimeout(function() { item.classList.add('revealed'); }, i * 150);
+              });
+            }
+            autoRevealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5, root: container });
+
+      [4,5,6,7].forEach(function(num) {
+        var s = document.getElementById('slide-' + num);
+        if (s) autoRevealObserver.observe(s);
+      });
+
+      // Click-to-reveal for slide 3 only
+      function revealNextOnSlide3() {
+        if (!slide3) return false;
+        var hidden = slide3.querySelector('.reveal-item:not(.revealed)');
+        if (hidden) { hidden.classList.add('revealed'); return true; }
+        return false;
+      }
+
+      container.addEventListener('click', function(e) {
+        if (e.target.closest('#slide-progress') || e.target.closest('a') || e.target.closest('button')) return;
+        if (currentSlideIndex === 2) { // slide-3 is index 2
+          if (!revealNextOnSlide3()) {
+            if (currentSlideIndex < slides.length - 1) slides[currentSlideIndex + 1].scrollIntoView({behavior:'smooth'});
+          }
         }
       });
+
     });
   </script>
+  
   <nav id="slide-progress" aria-label="Slide navigation">
     <button class="dot active" data-slide="0" aria-label="Go to slide 1"></button>
     <button class="dot" data-slide="1" aria-label="Go to slide 2"></button>
@@ -1035,7 +925,7 @@
     <button class="dot" data-slide="6" aria-label="Go to slide 7"></button>
     <button class="dot" data-slide="7" aria-label="Go to slide 8"></button>
   </nav>
-  <button id="btn-edit-corner" aria-label="Return to edit mode">✏️ Edit</button>
 
-</body>
-</html>
+
+
+</body></html>
