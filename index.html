@@ -140,6 +140,42 @@
       color: #666;
       margin-top: 0.5rem;
     }
+    .counselor-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      justify-content: center;
+      width: 100%;
+    }
+    .counselor-bullets li {
+      font-size: 1.05rem;
+      color: #aaa;
+      padding-left: 0;
+      position: relative;
+    }
+    .counselor-bullets li::before {
+      display: none;
+    }
+    .counselor-quote {
+      font-size: 1rem;
+      color: #555;
+      font-style: italic;
+      line-height: 1.5;
+      text-align: center;
+      width: 100%;
+    }
+    .slide2-footer {
+      position: absolute;
+      bottom: 4rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0 2rem;
+    }
     /* Responsive: stack on narrow screens */
     @media (max-width: 600px) {
       .slide-2-layout { flex-direction: column; gap: 1.5rem; }
@@ -521,11 +557,10 @@
     #slide-1.animate-in .slide-content,
     #slide-1.animate-in .slide-1-content  { animation: fadeIn 0.8s ease forwards; }
     #slide-2.animate-in .slide-2-layout   { animation: slideFromLeft 0.7s ease forwards; }
-    #slide-about.animate-in .slide-content { animation: fadeIn 0.8s ease forwards; }
-    #slide-3.animate-in .slide-content    { animation: slideFromRight 0.7s ease forwards; }
     #slide-4.animate-in .slide-content    { animation: zoomIn 0.7s ease forwards; }
     #slide-5.animate-in .slide-content    { animation: slideFromBottom 0.7s ease forwards; }
     #slide-6.animate-in .slide-content    { animation: fadeIn 0.5s ease forwards; }
+    #slide-help.animate-in .slide-content { animation: slideFromRight 0.7s ease forwards; }
     #slide-7.animate-in .slide-content    { animation: slideFromLeft 0.7s ease forwards; }
     #slide-8.animate-in .slide-content    { animation: zoomIn 0.7s ease forwards; }
     #slide-8.animate-in .slide-footer     { animation: fadeIn 0.6s ease 0.4s forwards; }
@@ -708,35 +743,13 @@
           <p class="dept">Lee College Counseling Services</p>
         </div>
       </div>
-    </section>
-
-    <section class="slide" id="slide-about">
-      <div class="slide-content about-statement">
-        <h2 class="slide-heading">About Me</h2>
-        <p class="about-quote">My academic journey started right here in these seats, just like my father and my children. The start I got here paved the way for my two Master's degrees and my Doctorate.</p>
-        <p class="about-closing">I am here for one reason — to help you navigate your own path to success. Your goals are my priority.</p>
-        <div class="about-tags">
-          <span class="about-tag about-tag--red">Solution-Focused Counseling</span>
-          <span class="about-tag about-tag--dark">Community Driven</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="slide animate-in" id="slide-3">
-      <div class="slide-content content-card">
-        <h2 class="slide-heading">How I Can Help</h2>
-        <ul class="help-list">
-          <li>Provide confidential, short-term therapeutic services</li>
-          <li>Help students cope with depression, anxiety, stress, low self-esteem, and related issues</li>
-          <li>Conduct individual and group therapy sessions (in-person or virtual) for students 18 and older</li>
-          <li>Participate in the CARES Team as a collaborator and resource</li>
-          <li>Coordinate mental health education and prevention programming</li>
-          <li>Develop community referral relationships</li>
-          <li>Respond to campus crises as needed</li>
-          <li>Support Title IX reporting with confidential assistance</li>
-          <li>Promote TimelyCare utilization for 24/7 student support</li>
-          <li>Maintain confidential records per ethical and licensing standards</li>
+      <div class="slide2-footer">
+        <ul class="counselor-bullets">
+          <li>About Me</li>
+          <li>Solution-Focused Counseling</li>
+          <li>Community Driven</li>
         </ul>
+        <p class="counselor-quote">I am here for one reason — to help you navigate your own path to success. Your goals are my priority.</p>
       </div>
     </section>
 
@@ -746,12 +759,8 @@
         <p class="slide-intro">Confidential, short-term counseling services are available to all currently enrolled Lee College students (age 18+), both in-person and virtually.</p>
         <div class="appt-block">
           <h3>How to Make an Appointment</h3>
-          <ul class="feature-list">
-            <li>Contact <span>Kimberly Rawlinson-Stevenson</span> directly at <span>281.427.5661</span></li>
-            <li>Submit a referral through the <strong>CARES Team</strong> at <a href="https://www.lee.edu/behavioral-intervention-team" target="_blank" rel="noopener">lee.edu/behavioral-intervention-team</a> or email <a href="mailto:bit@lee.edu">bit@lee.edu</a></li>
-            <li>Visit the <strong>Advising and Transfer Center</strong> (Rundell Hall, Room 100) — staff can connect you with counseling services</li>
-            <li>Use <strong>TimelyCare</strong> for immediate 24/7 virtual support at <a href="https://timely.care/lee" target="_blank" rel="noopener">timely.care/lee</a></li>
-          </ul>
+          <p>The link below is to be used to refer a student for mental health counseling for non-emergency situations. It can be a self-referral (completed by the student) or completed by a faculty or staff member with the student's permission. Once the form is submitted, the student will be contacted within 24 business hours.</p>
+          <p><a href="https://www.lee.edu/go/mental-health-referral" target="_blank" rel="noopener" style="color:var(--red);font-weight:bold;">www.lee.edu/go/mental-health-referral</a></p>
         </div>
         <div class="appt-block">
           <h3>Additional On-Campus Support</h3>
@@ -801,6 +810,18 @@
             </ul>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="slide animate-in" id="slide-help">
+      <div class="slide-content content-card">
+        <h2 class="slide-heading">How I Can Help</h2>
+        <ul class="help-list">
+          <li>Provide confidential, short-term therapeutic services</li>
+          <li>Help you cope with depression, anxiety, stress, low self-esteem, and related issues</li>
+          <li>Help you develop community referral relationships</li>
+          <li>Assist you in understanding how to utilize TimelyCare for 24/7 support</li>
+        </ul>
       </div>
     </section>
 
@@ -954,7 +975,6 @@
     <button class="dot" data-slide="5" aria-label="Go to slide 6"></button>
     <button class="dot" data-slide="6" aria-label="Go to slide 7"></button>
     <button class="dot" data-slide="7" aria-label="Go to slide 8"></button>
-    <button class="dot" data-slide="8" aria-label="Go to slide 9"></button>
   </nav>
 
 
